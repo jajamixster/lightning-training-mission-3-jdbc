@@ -1,6 +1,6 @@
 # lightning-training-mission-4-jdbc
 
-the folder's name is lighting-training-mission-3-jdbc LOL
+***the folder's name is lighting-training-mission-3-jdbc LOL***
 
 To get started, create mySQL Database and Table in your localhost by
 
