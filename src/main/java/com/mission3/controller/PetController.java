@@ -1,6 +1,6 @@
 package com.mission3.controller;
 
-import com.mission3.exception.ApiRequestException;
+import com.mission3.exception.IdNotFoundException;
 import com.mission3.model.PetResponse;
 import com.mission3.model.Pet;
 import com.mission3.service.PetService;
@@ -29,14 +29,11 @@ public class PetController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getPet(@PathVariable Long id) {
-        Optional<Pet> pet = petService.retrievePet(id);
-        if (pet.isEmpty()) {
-            //return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            throw new ApiRequestException("File is not on DB yet!");
-        } else {
-            return ResponseEntity.status(HttpStatus.OK).body(pet);
-        }
+    public ResponseEntity<?> getPet(@PathVariable Long id) throws IdNotFoundException {
+        Pet pet = petService.retrievePet(id);
+        if(pet == null)
+            throw new IdNotFoundException("Id '" + id + "' not found in Pet repository - GET Method");
+        return ResponseEntity.status(HttpStatus.OK).body(pet);
     }
 
     @PostMapping
@@ -45,20 +42,21 @@ public class PetController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> putPet(@PathVariable Long id, @RequestBody Pet body) {
-        if (petService.updatePet(id, body)>0) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<?> putPet(@PathVariable Long id, @Valid @RequestBody Pet body) throws IdNotFoundException {
+        // 0 = no line updated
+        int foundPet = petService.updatePet(id, body);
+        if(foundPet == 0)
+            throw new IdNotFoundException("Id '" + id + "' not found in Pet repository - PUT Method");
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    //TODO custom error meassge handling
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletePet(@PathVariable Long id) {
-        if (petService.deletePet(id)>0) {
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    public ResponseEntity<?> deletePet(@PathVariable Long id) throws IdNotFoundException{
+        // 0 = no line updated
+        int foundPet = petService.deletePet(id);
+        if(foundPet == 0)
+            throw new IdNotFoundException("Id '" + id + "'not found in Pet repository - DELETE Method");
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

@@ -18,8 +18,8 @@ public class PetService {
         return petRepository.selectAll();
     }
 
-    public Optional<Pet> retrievePet(Long id) {
-        return Optional.ofNullable(petRepository.select(id));
+    public Pet retrievePet(Long id) {
+        return petRepository.select(id);
     }
 
     public Pet createPet(Pet pet) {
