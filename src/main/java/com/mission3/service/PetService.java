@@ -22,7 +22,7 @@ public class PetService {
         return Optional.ofNullable(petRepository.select(id));
     }
 
-    public int createPet(Pet pet) {
+    public Pet createPet(Pet pet) {
         return petRepository.insert(pet);
     }
 

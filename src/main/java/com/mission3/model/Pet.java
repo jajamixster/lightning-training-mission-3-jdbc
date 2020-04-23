@@ -1,16 +1,15 @@
 package com.mission3.model;
 
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import javax.persistence.*;
 
+import javax.persistence.*;
 
 @Data
 @Entity
 public class Pet {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
